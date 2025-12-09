@@ -5,16 +5,15 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from app.permissions import GlobalPermissionClass
 from genres.models import Genre
 from genres.serializers import GenreSerializer
-from app.permissions import GlobalPermissionClass
-
 
 
 class GenreCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated, GlobalPermissionClass, )
     queryset = Genre.objects.all()
-    serializer_class = GenreSerializer    
+    serializer_class = GenreSerializer
 
 # @csrf_exempt
 # def genre_create_list_view(request):
@@ -33,8 +32,8 @@ class GenreCreateListView(generics.ListCreateAPIView):
 #         new_genre.save()
 
 #         return JsonResponse(
-#             {'id': new_genre.id, 'name': new_genre.name}, 
-#             status=201 # esse status indica que foi criado. 
+#             {'id': new_genre.id, 'name': new_genre.name},
+#             status=201 # esse status indica que foi criado.
 #         )
 
 
@@ -43,7 +42,7 @@ class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
 
-# @csrf_exempt    
+# @csrf_exempt
 # def genre_detail_view(request, pk):
 #     genre = get_object_or_404(Genre, pk=pk)
 #     if request.method == 'GET':
@@ -56,11 +55,11 @@ class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 #         return JsonResponse(
 #             {'id': genre.id, 'name': genre.name}
-#         )  
+#         )
 #     elif request.method == 'DELETE':
 #         genre.delete()
 
 #         return JsonResponse(
-#             {'message': 'Genero excluído com sucesso.'},  
+#             {'message': 'Genero excluído com sucesso.'},
 #             status=204,
-#         )        
+#         )
