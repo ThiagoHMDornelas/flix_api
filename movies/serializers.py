@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.db.models import Avg
 
 from movies.models import Movie
+from genres.serializers import GenreSerializer
+from actors.serializers import ActorSerializer
 # from genres.models import Genre
 # from actors.models import Actor
 
@@ -21,12 +23,14 @@ from movies.models import Movie
 #     resume = serializers.CharField()
 
 
-class MovieModelSerializer(serializers.ModelSerializer):
+class MovieListDetailSerializer(serializers.ModelSerializer):
+    genre = GenreSerializer()
+    actors = ActorSerializer(many=True)
     rate = serializers.SerializerMethodField(read_only=True)  # Campo calculado
 
     class Meta:
         model = Movie
-        fields = '__all__'  # ou ['title']
+        fields = ['id', 'title', 'genre', 'actors', 'release_date', 'rate', 'resume']  # '__all__'
 
     def get_rate(self, obj):  # o obj é cada um dos registros retornados
         rate = obj.reviews.aggregate(Avg('stars'))['stars__avg']   # aggregate é para adicionar um campo no retorno do sql
@@ -49,6 +53,13 @@ class MovieModelSerializer(serializers.ModelSerializer):
         #     return round(sum_reviews / reviews_count, 1)
 
         # return None
+
+
+class MovieModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = '__all__'  # ou ['title']
 
     def validate_release_date(self, value):
         if value.year < 1990:
