@@ -12,10 +12,10 @@ class Command(BaseCommand):
             type=str,
             help='Nome do arquivos com atores',
         )
-    
+
     def handle(self, *args, **options):
         file_name = options['file_name']
-        
+
         with open(file_name, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
 
