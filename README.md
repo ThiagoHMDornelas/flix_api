@@ -1,6 +1,8 @@
 # Flix API
 
 ![Testes](https://github.com/ThiagoHMDornelas/flix_api/actions/workflows/tests.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Django](https://img.shields.io/badge/django-5.2-092E20)
 
 API REST para gerenciamento de filmes, desenvolvida com Django e Django REST Framework. Serve como backend do sistema, oferecendo endpoints para cadastro e consulta de filmes, gêneros, atores/atrizes e avaliações, com autenticação via JWT e controle de permissões.
 
