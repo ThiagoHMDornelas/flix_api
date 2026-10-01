@@ -1,17 +1,17 @@
 from django.db.models import Count, Avg
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, views, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from app.permissions import GlobalPermissionClass
 from movies.models import Movie
-from movies.serializers import MovieModelSerializer, MovieListDetailSerializer  # , MovieSerializer
+from movies.serializers import MovieModelSerializer, MovieListDetailSerializer, MovieStatsSerializer
 from reviews.models import Review
 
 
 class MovieCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated, GlobalPermissionClass, )
     queryset = Movie.objects.all()
-    # serializer_class = MovieModelSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -23,7 +23,6 @@ class MovieCreateListView(generics.ListCreateAPIView):
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, GlobalPermissionClass, )
     queryset = Movie.objects.all()
-    # serializer_class = MovieModelSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -36,6 +35,7 @@ class MovieStatsView(views.APIView):
     permission_classes = (IsAuthenticated, GlobalPermissionClass)
     queryset = Movie.objects.all()
 
+    @extend_schema(responses=MovieStatsSerializer)
     def get(self, request):
         movies_total = self.queryset.count()
         movies_by_genre = self.queryset.values('genre__name').annotate(count=Count('id'))

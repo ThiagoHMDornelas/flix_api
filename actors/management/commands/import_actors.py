@@ -10,7 +10,7 @@ class Command(BaseCommand):
         parser.add_argument(
             'file_name',
             type=str,
-            help='Nome do arquivos com atores',
+            help='Nome do arquivo com atores',
         )
 
     def handle(self, *args, **options):
