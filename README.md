@@ -116,9 +116,9 @@ Inicie o servidor:
 
     python manage.py runserver
 
-A API estará disponível em:
+A documentação da API estará disponível em:
 
-    http://127.0.0.1:8000/
+    http://127.0.0.1:8000/api/docs/
 
 ## Variáveis de ambiente
 
@@ -192,9 +192,11 @@ Espere o serviço `web` como `Up`.
 
 **4. Acesse a API:**
 
-- API: `http://localhost:8000/`
 - Documentação Swagger: `http://localhost:8000/api/docs/`
+- Schema OpenAPI: `http://localhost:8000/api/schema/`
 - Painel administrativo: `http://localhost:8000/admin/`
+
+Os endpoints ficam sob o prefixo `http://localhost:8000/api/v1/`.
 
 As migrações são aplicadas automaticamente na inicialização.
 
@@ -443,7 +445,7 @@ O frontend fica em um repositório separado:
 
 > https://github.com/ThiagoHMDornelas/flix_app
 
-Para utilizá-lo, basta iniciar o Flix API e configurar o Flix App para apontar para `http://127.0.0.1:8000/`.
+Para utilizá-lo, basta iniciar o Flix API e configurar o `BASE_URL` do Flix App para apontar para `http://127.0.0.1:8000/api/v1/`.
 
 ## Licença
 
