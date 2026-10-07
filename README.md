@@ -3,6 +3,7 @@
 ![Testes](https://github.com/ThiagoHMDornelas/flix_api/actions/workflows/tests.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Django](https://img.shields.io/badge/django-5.2-092E20)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 API REST para gerenciamento de filmes, desenvolvida com Django e Django REST Framework. Serve como backend do sistema, oferecendo endpoints para cadastro e consulta de filmes, gêneros, atores/atrizes e avaliações, com autenticação via JWT e controle de permissões.
 
@@ -24,6 +25,7 @@ API REST para gerenciamento de filmes, desenvolvida com Django e Django REST Fra
 - [Importação de atores via CSV](#importação-de-atores-via-csv)
 - [Painel administrativo](#painel-administrativo)
 - [Relação com o Flix App](#relação-com-o-flix-app)
+- [Licença](#licença)
 
 ## Visão geral
 
@@ -146,23 +148,90 @@ O arquivo `.env` não é versionado (está no `.gitignore`).
 
 ## Executar com Docker
 
-Com o Docker e o Docker Compose instalados, é possível subir a aplicação sem configurar o ambiente Python manualmente:
+A forma recomendada de rodar a API. O Docker Compose sobe o serviço já configurado (Django + DRF + SQLite), sem precisar montar o ambiente Python manualmente.
 
-    docker compose up --build
+**Pré-requisitos:**
 
-A API estará disponível em:
+- Docker Desktop instalado e em execução (engine)
+- Docker Compose (já vem com o Docker Desktop)
+- Git instalado (para clonar o repositório)
+- A porta `8000` livre
 
-    http://localhost:8000/
+> **Importante:** o Docker Desktop sozinho **não** faz o setup inicial — ele é o *engine* e o painel de gerenciamento. Clonar o repositório e rodar `docker compose up --build` são feitos pelo **terminal**; o Docker Desktop é ótimo para acompanhar logs, iniciar/parar e abrir um terminal dentro do container **depois** que a stack subiu.
 
-E a documentação Swagger em:
+> O Docker **não** precisa do arquivo `.env`: as variáveis já vêm definidas no `docker-compose.yml`. O `.env.example` é usado apenas na execução local (fora do Docker).
 
-    http://localhost:8000/api/docs/
+### Passo a passo (via shell / PowerShell)
 
-Para parar e remover os containers:
+**1. Clone o repositório**
 
-    docker compose down
+```powershell
+git clone https://github.com/ThiagoHMDornelas/flix_api.git
+cd flix_api
+```
 
-As migrações são aplicadas automaticamente na inicialização. O banco SQLite é criado dentro do container, então os dados não persistem após um `docker compose down`.
+> O `git clone` cria a pasta `flix_api` dentro da pasta atual, e o `cd` entra nela. Se você **já está dentro** da pasta do projeto, **pule o `cd`**.
+
+**2. Suba a stack.** Na primeira execução o Docker compila a imagem do projeto — pode levar alguns minutos:
+
+```powershell
+docker compose up --build -d
+```
+
+**3. Confira os containers:**
+
+```powershell
+docker compose ps
+```
+
+Espere o serviço `web` como `Up`.
+
+| Serviço | Porta | Acesso |
+|---|---|---|
+| `web` | 8000 | `http://localhost:8000` |
+
+**4. Acesse a API:**
+
+- API: `http://localhost:8000/`
+- Documentação Swagger: `http://localhost:8000/api/docs/`
+- Painel administrativo: `http://localhost:8000/admin/`
+
+As migrações são aplicadas automaticamente na inicialização.
+
+**5. Crie o usuário administrador:**
+
+```powershell
+docker compose exec web python manage.py createsuperuser
+```
+
+**6. Comandos úteis:**
+
+```powershell
+docker compose logs -f web     # logs da API
+docker compose restart web     # reinicia a API
+docker compose down            # para e remove os containers
+```
+
+> O banco SQLite é criado dentro do container, então os dados **não persistem** após um `docker compose down`.
+
+### Usando o Docker Desktop (interface gráfica)
+
+Depois que a stack estiver no ar (passo 2), o Docker Desktop ajuda a operar. Na aba **Containers** você verá o serviço `web`:
+
+- **Logs**: clique no container → aba *Logs* (equivale a `docker compose logs`).
+- **Start / Stop / Restart**: botões no topo do container.
+- **Terminal no container**: botão *Exec* (útil para depurar dentro do container).
+- **Abrir no navegador**: clique na porta publicada (`8000:8000`).
+
+O que **não** dá para fazer pela interface gráfica: clonar o repositório e rodar `docker compose up --build` em um clone novo (isso é feito pelo terminal).
+
+### Problemas comuns
+
+- **A API não responde**
+  - Veja os logs: `docker compose logs -f web`
+  - Confirme que o container está `Up`: `docker compose ps`
+- **Erro de porta em uso** (`8000`) → pare o serviço que ocupa a porta ou ajuste o mapeamento no `docker-compose.yml` (ex.: `8001:8000`) e acesse em `http://localhost:8001`
+- **Os dados sumiram após reiniciar** → é esperado: o SQLite fica dentro do container e não persiste após um `docker compose down`
 
 ## Testes
 
@@ -375,3 +444,7 @@ O frontend fica em um repositório separado:
 > https://github.com/ThiagoHMDornelas/flix_app
 
 Para utilizá-lo, basta iniciar o Flix API e configurar o Flix App para apontar para `http://127.0.0.1:8000/`.
+
+## Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
