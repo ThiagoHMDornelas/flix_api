@@ -7,9 +7,14 @@
 
 API REST para gerenciamento de filmes, desenvolvida com Django e Django REST Framework. Serve como backend do sistema, oferecendo endpoints para cadastro e consulta de filmes, gêneros, atores/atrizes e avaliações, com autenticação via JWT e controle de permissões.
 
+![Documentação da API (Swagger)](docs/img/flixapi_swagger.png)
+
+*Documentação interativa (Swagger UI) — todos os endpoints da API.*
+
 ## Sumário
 
 - [Visão geral](#visão-geral)
+- [Telas do projeto](#telas-do-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias](#tecnologias)
 - [Estrutura do projeto](#estrutura-do-projeto)
@@ -30,6 +35,12 @@ API REST para gerenciamento de filmes, desenvolvida com Django e Django REST Fra
 ## Visão geral
 
 O **Flix API** é o backend do sistema de catálogo de filmes. Ele expõe uma API REST versionada em `/api/v1/`, persiste os dados em SQLite e protege os endpoints com autenticação JWT e permissões baseadas no modelo do Django.
+
+## Telas do projeto
+
+**Painel administrativo** — gerenciamento de filmes, gêneros, atores e avaliações:
+
+![Painel administrativo](docs/img/flixapi_admin.png)
 
 ## Funcionalidades
 
